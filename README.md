@@ -6,4 +6,4 @@ Il récupère les données et les affiche localement (print, logs) et dans adaio
 
 [[https://github.com/qkzk/ddht22-adaiot/DHT22-rpi_bb.png|alt=octocat]]
 
-![Electronic settings](/relative/path/to/DHT22-rpi_bb.png?raw=true "Hardware")
+![Electronic settings](DHT22-rpi_bb.png?raw=true "Hardware")
