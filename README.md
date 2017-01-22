@@ -13,6 +13,10 @@ Il récupère les données et les affiche localement (print, logs) et dans adaio
 * librairie python `Adafruit_IO`  
 * tokenss.py : editer `tokenss_example.py` et renommer en `tokens.py`  
 
+# Crontab
+`@reboot sleep 60 && sudo /usr/bin/python /home/pi/dht22/dht22.py >> /home/pi/dht22/temp_log/errors_python.log 2>&1`
+
+attend 1 minute (pour établir la connexion réseau) et lance le script. Les erreurs et prints doivent partir dans `errors_python.log`... mais pour l'instant ça ne fonctionne pas.
 
 # Changelog
 * 0.1 : tests et création du git  

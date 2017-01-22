@@ -14,6 +14,8 @@ import Adafruit_DHT
 from Adafruit_IO import Client, Data    #adafruit io : push data
 import tokenss
 
+fichier_log = "/home/pi/dht22/temp_log/temperature.log"
+
 # fonctions
 def releve():
 	'''
@@ -50,7 +52,7 @@ def displayreleve():
 	* dans un fichier log (ecriture directe sans passer par log handler)
 	* sur IO adafruit
 	'''
-	fichier_log = "/home/pi/temp_log/temperature.log"
+
 	temperature, humidity = releve()
 	heure = strftime("%a, %d %b %Y %H:%M:%S", localtime())
 	blabla ="{} : Temp={}*C  Humidity={}%".format(heure, temperature, humidity)
@@ -76,9 +78,9 @@ def refreshauto():
 if __name__ == '__main__':
 	# releve l'heure, l'affiche et la loggue dans le fichier
 	heure = strftime("%a, %d %b %Y %H:%M:%S", localtime())
-	texte_lancement = "\n" + heure + "lancement script temperature" + "\n"
+	texte_lancement = "\n" + heure + " lancement script temperature" + "\n"
 	print(texte_lancement)
-	hs = open("/home/pi/temp_log/temperature.log","a")
+	hs = open(fichier_log,"a")
 	hs.write(texte_lancement)
 	hs.close()
 
