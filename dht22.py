@@ -14,7 +14,10 @@ import Adafruit_DHT
 from Adafruit_IO import Client, Data    #adafruit io : push data
 import tokenss
 
+# globals
 fichier_log = "/home/pi/dht22/temp_log/temperature.log"
+sleeptime = 60
+# sleeptime = 10
 
 # fonctions
 def releve():
@@ -61,19 +64,34 @@ def displayreleve():
 	hs.write(blabla + "\n")
 	hs.close()
 
-	# adafuit key
-	aio = Client(tokenss.aiokey)
-	aio.send('temp', temperature)
-	aio.send('humid',humidity)
+
+
+	aiosend('temp', temperature)
+	aiosend('humid',humidity)
 
 def refreshauto():
 	'''
-	releves automatiques toutes les 10 s
+	releves automatiques
 	'''
 	continuer = True
 	while continuer:
 		displayreleve()
-		sleep(10)
+		sleep(sleeptime)
+
+def aiosend(sendmsg,feed):
+	"""
+	envoie les releves a adafruit io
+	"""
+	# adafuit key
+	aio = Client(tokenss.aiokey)
+	# catch les exceptions
+	try:
+		aio.send(sendmsg,feed)
+	except errors.RequestError as e:
+		print e
+		pass
+	except:
+		raise
 
 if __name__ == '__main__':
 	# releve l'heure, l'affiche et la loggue dans le fichier
