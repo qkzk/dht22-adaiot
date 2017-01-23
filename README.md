@@ -2,7 +2,7 @@
 
 script python gérant un capteur **dht22** à l'aide des librairies d'**Adafruit.**
 
-Il récupère les données et les affiche localement (print, logs) et dans adaiot
+Il récupère les données et les affiche localement (print, logs, envoi au serversocket) et dans adaiot
 
 # Montage
 
@@ -23,7 +23,7 @@ attend 1 minute (pour établir la connexion réseau) et lance le script. Les err
 adaiot fonctionne  
 les logs locaux fonctionnent  
 bug avec les `stdout` : impossible d'enregister tous les msg dans un fichier depuis bash
+* 0.2 display web server
 
 # todo
-* display web server
 * display sur lcd (pb avec le grove lcd qui empeche de tester pour l'instant)

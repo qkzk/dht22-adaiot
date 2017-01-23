@@ -13,11 +13,15 @@ from time import sleep
 import Adafruit_DHT
 from Adafruit_IO import Client, Data    #adafruit io : push data
 import tokenss
+import socket
 
 # globals
 fichier_log = "/home/pi/dht22/temp_log/temperature.log"
-sleeptime = 60
-# sleeptime = 10
+# sleeptime = 60
+sleeptime = 10
+
+# adafuit key
+aio = Client(tokenss.aiokey)
 
 # fonctions
 def releve():
@@ -59,13 +63,23 @@ def displayreleve():
 	temperature, humidity = releve()
 	heure = strftime("%a, %d %b %Y %H:%M:%S", localtime())
 	blabla ="{} : Temp={}*C  Humidity={}%".format(heure, temperature, humidity)
+	#exemple : "Mon, 23 Jan 2017 17:18:45 : Temp=22.4*C  Humidity=42.6%"
+
+	# logs locaux
 	print(blabla)
+	lines = open(fichier_log).readlines()
+	#ne garde que les 5000 dernieres lignes
+	if len(lines)>=5000:
+		open(fichier_log, 'w').writelines(lines[len(lines)-4999:len(lines)])
+	#ajout d'une ligne au log
 	hs = open(fichier_log,"a")
 	hs.write(blabla + "\n")
 	hs.close()
 
+	# envoi au webserver
+	socketconnect(blabla)
 
-
+	# adafruit io
 	aiosend('temp', temperature)
 	aiosend('humid',humidity)
 
@@ -82,8 +96,6 @@ def aiosend(sendmsg,feed):
 	"""
 	envoie les releves a adafruit io
 	"""
-	# adafuit key
-	aio = Client(tokenss.aiokey)
 	# catch les exceptions
 	try:
 		aio.send(sendmsg,feed)
@@ -92,6 +104,28 @@ def aiosend(sendmsg,feed):
 		pass
 	except:
 		raise
+
+#connexion au socket du rpi2Camera log si connexion impossible
+#parameters : socketmsg le corps du msg
+#appelé régulierement pour check le statut (open, close)
+#appelé à intervalle régulier (heartbeat)
+def socketconnect(socketmsg):
+	mylist = [socketmsg] #met le msg dans une liste
+	mylist.append(strftime("%Y-%m-%d %H:%M:%S"))
+
+	print mylist[0] #affiche le msg envoyé - à retirer une fois terminé
+	address = tokenss.address #rpiCamera
+	port = tokenss.port #port random, meme que server
+	clientsocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM) #parametres du socket
+	try: #pour eviter de planter si le server est down
+		clientsocket.connect((address, port)) #ouvre la connexion
+		clientsocket.send(str(mylist[1])+" "+str(mylist[0])) #envoie le msg
+	except Exception as e:
+		print("Erreur de connexion SOCKET : %s:%d. Exception is %s" % (address, port, e)) #log un msg si erreur
+	finally:
+		clientsocket.close() #dans tous les cas ferme la connexion
+
+##########################################
 
 if __name__ == '__main__':
 	# releve l'heure, l'affiche et la loggue dans le fichier
