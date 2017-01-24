@@ -11,7 +11,7 @@ il faudra ajouter les logs des erreurs qui, sinon, risquent d'etre perdues...
 from time import localtime, strftime
 from time import sleep
 import Adafruit_DHT
-from Adafruit_IO import Client, Data    #adafruit io : push data
+from Adafruit_IO import *    #adafruit io : push data
 import tokenss
 import socket
 
