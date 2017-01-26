@@ -92,18 +92,34 @@ def refreshauto():
 		displayreleve()
 		sleep(sleeptime)
 
+# def aiosend(sendmsg,feed):
+# 	# marche tjrs pas
+# 	"""
+# 	envoie les releves a adafruit io
+# 	"""
+# 	# catch les exceptions
+# 	try:
+# 		aio.send(sendmsg,feed)
+# 	except errors.RequestError as e:
+# 		print e
+# 		pass
+# 	except ConnectionError as e:
+# 		print # coding=utf-8
+# 		pass
+# 	except Exception as e:
+# 		print e
+# 		raise
 def aiosend(sendmsg,feed):
+	# la grosse lose
 	"""
 	envoie les releves a adafruit io
 	"""
 	# catch les exceptions
 	try:
 		aio.send(sendmsg,feed)
-	except errors.RequestError as e:
+	except Exception as e:
 		print e
 		pass
-	except:
-		raise
 
 #connexion au socket du rpi2Camera log si connexion impossible
 #parameters : socketmsg le corps du msg
